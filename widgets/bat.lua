@@ -10,14 +10,14 @@ local string = { format = string.format }
 local helpers = require("vicious.helpers")
 local math = {
     min = math.min,
-    max = math.max,
     floor = math.floor
 }
 -- }}}
 
 
 -- Bat: provides state, charge, and remaining time for a requested battery
-module("vicious.widgets.bat")
+-- vicious.widgets.bat
+local bat = {}
 
 
 -- {{{ Battery widget type
@@ -57,9 +57,9 @@ local function worker(format, warg)
 
     -- Get charge information
     if battery.current_now then
-        rate = battery.current_now
+        rate = tonumber(battery.current_now)
     elseif battery.power_now then
-        rate = battery.power_now
+        rate = tonumber(battery.power_now)
     else
         return {state, percent, "N/A"}
     end
@@ -67,7 +67,7 @@ local function worker(format, warg)
     -- Calculate remaining (charging or discharging) time
     local time = "N/A"
 
-    if tonumber(rate) then
+    if rate ~= nil and rate ~= 0 then
         if state == "+" then
             timeleft = (tonumber(capacity) - tonumber(remaining)) / tonumber(rate)
         elseif state == "-" then
@@ -76,9 +76,9 @@ local function worker(format, warg)
             return {state, percent, time}
         end
 
-        -- Calculate time (but work around broken BAT/ACPI implementations)
-        local hoursleft   = math.max(math.floor(timeleft), 0)
-        local minutesleft = math.max(math.floor((timeleft - hoursleft) * 60 ), 0)
+        -- Calculate time
+        local hoursleft   = math.floor(timeleft)
+        local minutesleft = math.floor((timeleft - hoursleft) * 60 )
 
         time = string.format("%02d:%02d", hoursleft, minutesleft)
     end
@@ -87,4 +87,4 @@ local function worker(format, warg)
 end
 -- }}}
 
-setmetatable(_M, { __call = function(_, ...) return worker(...) end })
+return setmetatable(bat, { __call = function(_, ...) return worker(...) end })

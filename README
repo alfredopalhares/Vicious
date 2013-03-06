@@ -35,7 +35,7 @@ your memory.
 
 Then add the following to the top of your rc.lua:
 
-  require("vicious")
+  vicious = require("vicious")
 
 Once you create a widget (a textbox, graph or a progressbar) call
 vicious.register() to register it with Vicious:
@@ -132,9 +132,10 @@ vicious.widgets.cpufreq
 vicious.widgets.thermal
   - provides temperature levels of ACPI and coretemp thermal zones
   - takes the thermal zone as an argument, i.e. "thermal_zone0", or a
-    table with 1st field as thermal zone and 2nd as data source -
-    available data sources are "proc", "core" and "sys" - which is the
-    default when only the zone is provided
+    table with 1st field as thermal zone, 2nd as data source -
+    available data sources are "proc", "core" and "sys" (which is the
+    default when only the zone is provided) and 3rd optional argument
+    as a temperature input file to read
   - returns 1st value as temperature of requested thermal zone
 
 vicious.widgets.uptime
@@ -290,7 +291,8 @@ in the contrib directory of Vicious. The contrib directory contains
 extra widgets you can use. Some are for less common hardware, and
 other were contributed by Vicious users. The contrib directory also
 holds widget types that were obsoleted or rewritten. Contrib widgets
-will not be imported by init unless you explicitly enable it.
+will not be imported by init unless you explicitly enable it, or load
+them in your rc.lua.
 
 Richard Kolkovich, a FreeBSD user, published his vicious-fbsd
 branch. If you are also a BSD user you can find his work here:
@@ -371,8 +373,8 @@ file with their GPG key. Trough the GPG Passphrase Agent they could
 then decrypt the file transparently while their session is active.
 
 
-Usage examples
---------------
+Usage examples (for awesome v3.4)
+---------------------------------
 Start with a simple widget, like date. Then build your setup from
 there, one widget at a time. Also remember that besides creating and
 registering widgets you have to add them to a wibox (statusbar) in
@@ -558,3 +560,4 @@ Vicious contributors:
   - Hiltjo Posthuma          <hiltjo codemadness.org>
   - Hagen Schink             <troja84 googlemail.com>
   - Jörg Thalheim            <jthalheim gmail.com>
+  - Arvydas Sidorenko        <asido4 gmail.com>
